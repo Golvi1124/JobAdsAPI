@@ -1,5 +1,48 @@
-﻿namespace JobAdsAPI.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using JobAdsAPI.Models;
 
-public class JobAdDbContext
+namespace JobAdsAPI.Data;
+
+public class JobAdDbContext(DbContextOptions<JobAdDbContext> options) : DbContext(options)
 {
+    public DbSet<JobAd> JobAds => Set<JobAd>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<JobAd>().HasData(
+
+                new JobAd
+                {
+                    Id = 1,
+                    PublishedAt = new DateTime(2023, 1, 30),
+                    CompanyName = "Tech Corp",
+                    JobTitle = "Software Engineer",
+                    Location = "Remote",
+                    JobRole = "Backend",
+                    WorkType = "Remote",
+                    ExpierienceLevel = "Mid",
+                    IsCSharpMentioned = true,
+                    IsDotNetMentioned = true,
+                    IsSQLMentioned = false,
+                    OtherSkills = "Azure, Docker"
+                },
+                new JobAd
+                {
+                    Id = 2,
+                    PublishedAt = new DateTime(2024, 4, 14),
+                    CompanyName = "Web Solutions",
+                    JobTitle = "Frontend Developer",
+                    Location = "Hybrid",
+                    JobRole = "Frontend",
+                    WorkType = "Hybrid",
+                    ExpierienceLevel = "Junior",
+                    IsCSharpMentioned = false,
+                    IsDotNetMentioned = false,
+                    IsSQLMentioned = false,
+                    OtherSkills = "React, JavaScript"
+                }
+        );
+    }
 }
