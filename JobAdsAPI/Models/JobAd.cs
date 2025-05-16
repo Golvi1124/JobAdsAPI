@@ -2,10 +2,10 @@
 
 namespace JobAdsAPI.Models;
 
-public class JodAd
+public class JobAd
 {
     public int Id { get; set; }
-    public DateTime PublishedAt { get; set; } = DateTime.UtcNow;
+    public DateTime PublishedAt { get; set; } // = DateTime.UtcNow;
     public string? CompanyName { get; set; }
     public string? JobTitle { get; set; }
     public string? Location { get; set; }
