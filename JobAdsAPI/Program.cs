@@ -1,3 +1,12 @@
+/* relationships to add:
+ 
+ * One-to-One => A JobAd has one detailed JobDescription
+ * One-to-Many =>  A JobAd can have many Tags (if in add is mentioned keywords)
+ * Many-to-Many => A JobAd can have many Locations 
+ 
+ */
+
+
 using JobAdsAPI.Data;
 using JobAdsAPI.Models;
 using Microsoft.Extensions.DependencyInjection;

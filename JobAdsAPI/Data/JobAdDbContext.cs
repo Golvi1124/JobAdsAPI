@@ -7,6 +7,8 @@ public class JobAdDbContext(DbContextOptions<JobAdDbContext> options) : DbContex
 {
     public DbSet<JobAd> JobAds => Set<JobAd>();
 
+    public DbSet<JobAdDescription> JobAdDescriptions => Set<JobAdDescription>(); // making sure that this table name is JobAdDescriptions
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

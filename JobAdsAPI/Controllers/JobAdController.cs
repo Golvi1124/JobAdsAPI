@@ -16,7 +16,9 @@ public class JobAdController(JobAdDbContext context) : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<JobAd>>> GetJobAds()
     {
-        return Ok(await _context.JobAds.ToListAsync());
+        return Ok(await _context.JobAds
+            .Include(j => j.JobAdDescription) // Include the JobAdDescription navigation property
+            .ToListAsync());
     }
 
     [HttpGet("{id}")]
@@ -77,4 +79,4 @@ public class JobAdController(JobAdDbContext context) : ControllerBase
 
         return NoContent();
     }
-}
+} 
