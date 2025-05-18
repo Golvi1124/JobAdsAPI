@@ -1,94 +1,50 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using JobAdsAPI.Models;
+using JobAdsAPI.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace JobAdsAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class JobAdController : ControllerBase
+public class JobAdController(JobAdDbContext context) : ControllerBase
 {
-    static private List<JobAd> jobAds = new List<JobAd> // static because we will add data to it and will want to show all
-    {
-        new JobAd
-        {
-            Id = 1,
-            PublishedAt = new DateTime(2023, 1, 30), // Correctly initializing DateTime
-            CompanyName = "Tech Company",
-            JobTitle = "Software Engineer",
-            Location = "Remote",
-            JobRole = "Fullstack",
-            WorkType = "Remote",
-            ExpierienceLevel = "Mid",
-            IsCSharpMentioned = true,
-            IsDotNetMentioned = true,
-            IsSQLMentioned = true,
-            OtherSkills = "JavaScript, React"
-        },
+    private readonly JobAdDbContext _context = context;    //indepndency injection
 
-        new JobAd
-        {
-            Id = 2,
-            PublishedAt = new DateTime(2023, 4, 12),
-            CompanyName = "Another Tech Company",
-            JobTitle = "Backend Developer",
-            Location = "Hybrid",
-            JobRole = "Backend",
-            WorkType = "Hybrid",
-            ExpierienceLevel = "Senior",
-            IsCSharpMentioned = true,
-            IsDotNetMentioned = false,
-            IsSQLMentioned = true,
-            OtherSkills = "Node.js, Express"
-        },
-        new JobAd
-        {
-            Id = 3,
-            PublishedAt = new DateTime(2023, 6, 15),
-            CompanyName = "Web Solutions",
-            JobTitle = "Frontend Developer",
-            Location = "Onsite",
-            JobRole = "Frontend",
-            WorkType = "Onsite",
-            ExpierienceLevel = "Junior",
-            IsCSharpMentioned = false,
-            IsDotNetMentioned = false,
-            IsSQLMentioned = false,
-            OtherSkills = "HTML, CSS, JavaScript"
-        }
-    };
     [HttpGet]
-    public ActionResult<List<JobAd>> GetAllJobAds()
+    public async Task<ActionResult<List<JobAd>>> GetJobAds()
     {
-        return Ok(jobAds);
+        return Ok(await _context.JobAds.ToListAsync());
     }
 
     [HttpGet("{id}")]
-    public ActionResult<JobAd> GetJobAdById(int id)
+    public async Task<ActionResult<JobAd>> GetJobAdById(int id)
     {
-        var jobAd = jobAds.FirstOrDefault(j => j.Id == id);
+        var jobAd = await _context.JobAds.FindAsync(id);
         if (jobAd == null)
-        {
             return NotFound();
-        }
+        
         return Ok(jobAd);
     }
 
     [HttpPost]
-    public ActionResult<JobAd> AddJobAd(JobAd newAd)
+    public async Task<ActionResult<JobAd>> AddJobAd(JobAd newAd)
     {
         if (newAd == null)
             return BadRequest();
 
-        newAd.Id = jobAds.Max(j => j.Id) + 1;
-        jobAds.Add(newAd);
+        _context.JobAds.Add(newAd);
+        await _context.SaveChangesAsync(); // Save changes to the database
+
         return CreatedAtAction(nameof(GetJobAdById), new { id = newAd.Id }, newAd);
     }
 
     [HttpPut("{id}")]
-    public IActionResult UpdateJobAd(int id, JobAd updatedAd)
+    public async Task<IActionResult> UpdateJobAd(int id, JobAd updatedAd)
     {
-        var existingAd = jobAds.FirstOrDefault(j => j.Id == id);
+        var existingAd = await _context.JobAds.FindAsync(id);
         if (existingAd == null)
             return NotFound();
 
@@ -104,17 +60,21 @@ public class JobAdController : ControllerBase
         existingAd.IsSQLMentioned = updatedAd.IsSQLMentioned;
         existingAd.OtherSkills = updatedAd.OtherSkills;
 
+        await _context.SaveChangesAsync(); 
+
         return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public IActionResult DeleteJobAd(int id)
+    public async Task<IActionResult> DeleteJobAd(int id)
     {
-        var jobAd = jobAds.FirstOrDefault(j => j.Id == id);
+        var jobAd = await _context.JobAds.FindAsync(id);
         if (jobAd == null)
             return NotFound();
 
-        jobAds.Remove(jobAd);
+        _context.JobAds.Remove(jobAd);
+        await _context.SaveChangesAsync();
+
         return NoContent();
     }
 }
