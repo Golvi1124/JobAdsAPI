@@ -3,6 +3,7 @@ using System;
 using JobAdsAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,27 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobAdsAPI.Migrations
 {
     [DbContext(typeof(JobAdDbContext))]
-    partial class JobAdDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250518211621_smallChanges")]
+    partial class smallChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.5");
-
-            modelBuilder.Entity("JobAdOtherSkill", b =>
-                {
-                    b.Property<int>("JobAdsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("OtherSkillsId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("JobAdsId", "OtherSkillsId");
-
-                    b.HasIndex("OtherSkillsId");
-
-                    b.ToTable("JobAdOtherSkill");
-                });
 
             modelBuilder.Entity("JobAdsAPI.Models.ExpierienceLevel", b =>
                 {
@@ -74,6 +62,9 @@ namespace JobAdsAPI.Migrations
                     b.Property<int?>("LocationId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("OtherSkills")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("PublishedAt")
                         .HasColumnType("TEXT");
 
@@ -99,6 +90,7 @@ namespace JobAdsAPI.Migrations
                             IsDotNetMentioned = true,
                             IsSQLMentioned = false,
                             JobTitle = "Software Engineer",
+                            OtherSkills = "Azure, Docker",
                             PublishedAt = new DateTime(2023, 1, 30, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -109,6 +101,7 @@ namespace JobAdsAPI.Migrations
                             IsDotNetMentioned = false,
                             IsSQLMentioned = false,
                             JobTitle = "Frontend Developer",
+                            OtherSkills = "React, JavaScript",
                             PublishedAt = new DateTime(2024, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -151,21 +144,6 @@ namespace JobAdsAPI.Migrations
                     b.ToTable("Location");
                 });
 
-            modelBuilder.Entity("JobAdsAPI.Models.OtherSkill", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OtherSkill");
-                });
-
             modelBuilder.Entity("JobAdsAPI.Models.WorkType", b =>
                 {
                     b.Property<int>("Id")
@@ -179,21 +157,6 @@ namespace JobAdsAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("WorkType");
-                });
-
-            modelBuilder.Entity("JobAdOtherSkill", b =>
-                {
-                    b.HasOne("JobAdsAPI.Models.JobAd", null)
-                        .WithMany()
-                        .HasForeignKey("JobAdsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("JobAdsAPI.Models.OtherSkill", null)
-                        .WithMany()
-                        .HasForeignKey("OtherSkillsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("JobAdsAPI.Models.JobAd", b =>

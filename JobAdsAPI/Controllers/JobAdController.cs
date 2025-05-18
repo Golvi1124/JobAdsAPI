@@ -18,6 +18,10 @@ public class JobAdController(JobAdDbContext context) : ControllerBase
     {
         return Ok(await _context.JobAds
             .Include(j => j.JobAdDescription) // Include the JobAdDescription navigation property
+            .Include(j => j.Location) // Include the Location navigation property
+            .Include(j => j.WorkType) // Include the WorkType navigation property
+            .Include(j => j.ExpierienceLevel) // Include the ExpierienceLevel navigation property
+            .Include(j => j.OtherSkills) // Include the OtherSkills navigation property
             .ToListAsync());
     }
 
@@ -54,7 +58,6 @@ public class JobAdController(JobAdDbContext context) : ControllerBase
         existingAd.CompanyName = updatedAd.CompanyName;
         existingAd.JobTitle = updatedAd.JobTitle;
         existingAd.Location = updatedAd.Location;
-        existingAd.JobRole = updatedAd.JobRole;
         existingAd.WorkType = updatedAd.WorkType;
         existingAd.ExpierienceLevel = updatedAd.ExpierienceLevel;
         existingAd.IsCSharpMentioned = updatedAd.IsCSharpMentioned;

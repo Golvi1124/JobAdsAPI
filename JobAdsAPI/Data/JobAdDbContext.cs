@@ -21,14 +21,9 @@ public class JobAdDbContext(DbContextOptions<JobAdDbContext> options) : DbContex
                     PublishedAt = new DateTime(2023, 1, 30),
                     CompanyName = "Tech Corp",
                     JobTitle = "Software Engineer",
-                    Location = "Oslo",
-                    JobRole = "Backend",
-                    WorkType = "Remote",
-                    ExpierienceLevel = "Mid",
                     IsCSharpMentioned = true,
                     IsDotNetMentioned = true,
                     IsSQLMentioned = false,
-                    OtherSkills = "Azure, Docker"
                 },
                 new JobAd
                 {
@@ -36,14 +31,9 @@ public class JobAdDbContext(DbContextOptions<JobAdDbContext> options) : DbContex
                     PublishedAt = new DateTime(2024, 4, 14),
                     CompanyName = "Web Solutions",
                     JobTitle = "Frontend Developer",
-                    Location = "Bergen",
-                    JobRole = "Frontend",
-                    WorkType = "Hybrid",
-                    ExpierienceLevel = "Junior",
                     IsCSharpMentioned = false,
                     IsDotNetMentioned = false,
                     IsSQLMentioned = false,
-                    OtherSkills = "React, JavaScript"
                 }
         );
     }

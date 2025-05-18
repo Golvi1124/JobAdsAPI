@@ -1,8 +1,12 @@
 /* relationships to add:
  
- * One-to-One => A JobAd has one detailed JobDescription
- * One-to-Many =>  A JobAd can have many Tags (if in add is mentioned keywords)
+
  * Many-to-Many => A JobAd can have many Locations 
+ 
+ * To check/fix:
+ * JobType or something like this still exists in the database
+ * Update all CRUD methods to include the new relationships
+ * options for seeding data at the same time?
  
  */
 
