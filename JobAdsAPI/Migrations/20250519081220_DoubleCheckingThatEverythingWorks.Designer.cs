@@ -3,6 +3,7 @@ using System;
 using JobAdsAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobAdsAPI.Migrations
 {
     [DbContext(typeof(JobAdDbContext))]
-    partial class JobAdDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250519081220_DoubleCheckingThatEverythingWorks")]
+    partial class DoubleCheckingThatEverythingWorks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.5");

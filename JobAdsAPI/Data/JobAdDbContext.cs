@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using JobAdsAPI.Models;
+using Microsoft.Data.Sqlite;
 
 namespace JobAdsAPI.Data;
 
@@ -8,6 +9,10 @@ public class JobAdDbContext(DbContextOptions<JobAdDbContext> options) : DbContex
     public DbSet<JobAd> JobAds => Set<JobAd>();
 
     public DbSet<JobAdDescription> JobAdDescriptions => Set<JobAdDescription>(); // making sure that this table name is JobAdDescriptions
+    public DbSet<Location> Locations => Set<Location>();
+    public DbSet<WorkType> WorkTypes => Set<WorkType>();
+    public DbSet<ExpierienceLevel> ExpierienceLevels => Set<ExpierienceLevel>();
+    public DbSet<OtherSkill> OtherSkills => Set<OtherSkill>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

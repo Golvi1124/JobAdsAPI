@@ -8,6 +8,9 @@ public class JobAd
     public DateTime PublishedAt { get; set; } 
     public string? CompanyName { get; set; }
     public string? JobTitle { get; set; }
+    public bool IsCSharpMentioned { get; set; } = false;
+    public bool IsDotNetMentioned { get; set; } = false;
+    public bool IsSQLMentioned { get; set; } = false;
 
     // One-to-One relationship
     public JobAdDescription? JobAdDescription { get; set; }
@@ -24,11 +27,4 @@ public class JobAd
 
     // Many-to-Many relationship
     public List<OtherSkill>? OtherSkills { get; set; }  // Other required skills/languages
-
-
-    // should i do something better with boolean values?
-    public bool IsCSharpMentioned { get; set; } = false;
-    public bool IsDotNetMentioned { get; set; } = false;
-    public bool IsSQLMentioned { get; set; } = false;
-
 }
