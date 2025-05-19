@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using JobAdsAPI.Models;
 using JobAdsAPI.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace JobAdsAPI.Controllers;
 
@@ -16,13 +14,15 @@ public class JobAdController(JobAdDbContext context) : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<JobAd>>> GetJobAds()
     {
-        return Ok(await _context.JobAds
-            .Include(j => j.JobAdDescription) // Include the JobAdDescription navigation property
-            .Include(j => j.Location) // Include the Location navigation property
-            .Include(j => j.WorkType) // Include the WorkType navigation property
-            .Include(j => j.ExpierienceLevel) // Include the ExpierienceLevel navigation property
-            .Include(j => j.OtherSkills) // Include the OtherSkills navigation property
-            .ToListAsync());
+        var jobAds = await _context.JobAds
+            .Include(j => j.JobAdDescription)
+            .Include(j => j.Location)
+            .Include(j => j.WorkType)
+            .Include(j => j.ExpierienceLevel)
+            .Include(j => j.OtherSkills) // Include the OtherSkills relationship
+            .ToListAsync();
+
+        return Ok(jobAds);
     }
 
     [HttpGet("{id}")]

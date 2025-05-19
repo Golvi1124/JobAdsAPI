@@ -18,28 +18,39 @@ public class JobAdDbContext(DbContextOptions<JobAdDbContext> options) : DbContex
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<JobAd>().HasData(
+        // Define the one-to-one relationship between JobAd and JobAdDescription
+        modelBuilder.Entity<JobAd>()
+            .HasOne(j => j.JobAdDescription)
+            .WithOne()
+            .HasForeignKey<JobAd>(j => j.JobAdDescriptionId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-                new JobAd
-                {
-                    Id = 1,
-                    PublishedAt = new DateTime(2023, 1, 30),
-                    CompanyName = "Tech Corp",
-                    JobTitle = "Software Engineer",
-                    IsCSharpMentioned = true,
-                    IsDotNetMentioned = true,
-                    IsSQLMentioned = false,
-                },
-                new JobAd
-                {
-                    Id = 2,
-                    PublishedAt = new DateTime(2024, 4, 14),
-                    CompanyName = "Web Solutions",
-                    JobTitle = "Frontend Developer",
-                    IsCSharpMentioned = false,
-                    IsDotNetMentioned = false,
-                    IsSQLMentioned = false,
-                }
+        // Define the many-to-many relationship between JobAd and OtherSkill
+        modelBuilder.Entity<JobAd>()
+            .HasMany(j => j.OtherSkills)
+            .WithMany(s => s.JobAds)
+            .UsingEntity<Dictionary<string, object>>(
+                "JobAdOtherSkills",
+                j => j.HasOne<OtherSkill>().WithMany().HasForeignKey("OtherSkillId"),
+                s => s.HasOne<JobAd>().WithMany().HasForeignKey("JobAdId")
+            );
+
+        // Seed ExpierienceLevel data
+        modelBuilder.Entity<ExpierienceLevel>().HasData(
+            new ExpierienceLevel { Id = 1, Name = "Junior" },
+            new ExpierienceLevel { Id = 2, Name = "Mid" },
+            new ExpierienceLevel { Id = 3, Name = "Senior" }
+        );
+
+        // Seed WorkType data
+        modelBuilder.Entity<WorkType>().HasData(
+            new WorkType { Id = 1, Name = "Office" },
+            new WorkType { Id = 2, Name = "Hybrid" },
+            new WorkType { Id = 3, Name = "Remote" }
         );
     }
+
+
+
+
 }

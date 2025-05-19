@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-
-namespace JobAdsAPI.Models;
+﻿namespace JobAdsAPI.Models;
 
 public class JobAd
 {
@@ -13,6 +11,7 @@ public class JobAd
     public bool IsSQLMentioned { get; set; } = false;
 
     // One-to-One relationship
+    public int? JobAdDescriptionId { get; set; }
     public JobAdDescription? JobAdDescription { get; set; }
 
     // One-to-Many relationship
@@ -26,5 +25,5 @@ public class JobAd
     public ExpierienceLevel? ExpierienceLevel { get; set; }
 
     // Many-to-Many relationship
-    public List<OtherSkill>? OtherSkills { get; set; }  // Other required skills/languages
+    public List<OtherSkill> OtherSkills { get; set; } = new();  // Other required skills/languages
 }

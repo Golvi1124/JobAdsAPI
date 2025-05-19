@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobAdsAPI.Migrations
 {
     [DbContext(typeof(JobAdDbContext))]
-    [Migration("20250518215031_OtherSkillRelationship")]
-    partial class OtherSkillRelationship
+    [Migration("20250519112844_StartingNewAgain")]
+    partial class StartingNewAgain
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,19 +20,19 @@ namespace JobAdsAPI.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.5");
 
-            modelBuilder.Entity("JobAdOtherSkill", b =>
+            modelBuilder.Entity("JobAdOtherSkills", b =>
                 {
-                    b.Property<int>("JobAdsId")
+                    b.Property<int>("JobAdId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("OtherSkillsId")
+                    b.Property<int>("OtherSkillId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("JobAdsId", "OtherSkillsId");
+                    b.HasKey("JobAdId", "OtherSkillId");
 
-                    b.HasIndex("OtherSkillsId");
+                    b.HasIndex("OtherSkillId");
 
-                    b.ToTable("JobAdOtherSkill");
+                    b.ToTable("JobAdOtherSkills");
                 });
 
             modelBuilder.Entity("JobAdsAPI.Models.ExpierienceLevel", b =>
@@ -47,7 +47,24 @@ namespace JobAdsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ExpierienceLevel");
+                    b.ToTable("ExpierienceLevels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Junior"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Mid"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Senior"
+                        });
                 });
 
             modelBuilder.Entity("JobAdsAPI.Models.JobAd", b =>
@@ -71,6 +88,9 @@ namespace JobAdsAPI.Migrations
                     b.Property<bool>("IsSQLMentioned")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("JobAdDescriptionId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("JobTitle")
                         .HasColumnType("TEXT");
 
@@ -87,33 +107,14 @@ namespace JobAdsAPI.Migrations
 
                     b.HasIndex("ExpierienceLevelId");
 
+                    b.HasIndex("JobAdDescriptionId")
+                        .IsUnique();
+
                     b.HasIndex("LocationId");
 
                     b.HasIndex("WorkTypeId");
 
                     b.ToTable("JobAds");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CompanyName = "Tech Corp",
-                            IsCSharpMentioned = true,
-                            IsDotNetMentioned = true,
-                            IsSQLMentioned = false,
-                            JobTitle = "Software Engineer",
-                            PublishedAt = new DateTime(2023, 1, 30, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CompanyName = "Web Solutions",
-                            IsCSharpMentioned = false,
-                            IsDotNetMentioned = false,
-                            IsSQLMentioned = false,
-                            JobTitle = "Frontend Developer",
-                            PublishedAt = new DateTime(2024, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("JobAdsAPI.Models.JobAdDescription", b =>
@@ -133,9 +134,6 @@ namespace JobAdsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("JobAdId")
-                        .IsUnique();
-
                     b.ToTable("JobAdDescriptions");
                 });
 
@@ -151,7 +149,7 @@ namespace JobAdsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Location");
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("JobAdsAPI.Models.OtherSkill", b =>
@@ -166,7 +164,7 @@ namespace JobAdsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OtherSkill");
+                    b.ToTable("OtherSkills");
                 });
 
             modelBuilder.Entity("JobAdsAPI.Models.WorkType", b =>
@@ -181,20 +179,37 @@ namespace JobAdsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkType");
+                    b.ToTable("WorkTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Office"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Hybrid"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Remote"
+                        });
                 });
 
-            modelBuilder.Entity("JobAdOtherSkill", b =>
+            modelBuilder.Entity("JobAdOtherSkills", b =>
                 {
                     b.HasOne("JobAdsAPI.Models.JobAd", null)
                         .WithMany()
-                        .HasForeignKey("JobAdsId")
+                        .HasForeignKey("JobAdId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("JobAdsAPI.Models.OtherSkill", null)
                         .WithMany()
-                        .HasForeignKey("OtherSkillsId")
+                        .HasForeignKey("OtherSkillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -204,6 +219,10 @@ namespace JobAdsAPI.Migrations
                     b.HasOne("JobAdsAPI.Models.ExpierienceLevel", "ExpierienceLevel")
                         .WithMany()
                         .HasForeignKey("ExpierienceLevelId");
+
+                    b.HasOne("JobAdsAPI.Models.JobAdDescription", "JobAdDescription")
+                        .WithOne()
+                        .HasForeignKey("JobAdsAPI.Models.JobAd", "JobAdDescriptionId");
 
                     b.HasOne("JobAdsAPI.Models.Location", "Location")
                         .WithMany()
@@ -215,23 +234,11 @@ namespace JobAdsAPI.Migrations
 
                     b.Navigation("ExpierienceLevel");
 
+                    b.Navigation("JobAdDescription");
+
                     b.Navigation("Location");
 
                     b.Navigation("WorkType");
-                });
-
-            modelBuilder.Entity("JobAdsAPI.Models.JobAdDescription", b =>
-                {
-                    b.HasOne("JobAdsAPI.Models.JobAd", null)
-                        .WithOne("JobAdDescription")
-                        .HasForeignKey("JobAdsAPI.Models.JobAdDescription", "JobAdId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("JobAdsAPI.Models.JobAd", b =>
-                {
-                    b.Navigation("JobAdDescription");
                 });
 #pragma warning restore 612, 618
         }
