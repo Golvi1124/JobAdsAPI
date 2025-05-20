@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using JobAdsAPI.Models;
-using Microsoft.Data.Sqlite;
 
 namespace JobAdsAPI.Data;
 
@@ -49,8 +48,4 @@ public class JobAdDbContext(DbContextOptions<JobAdDbContext> options) : DbContex
             new WorkType { Id = 3, Name = "Remote" }
         );
     }
-
-
-
-
 }

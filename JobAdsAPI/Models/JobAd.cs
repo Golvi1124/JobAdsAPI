@@ -3,7 +3,7 @@
 public class JobAd
 {
     public int Id { get; set; }
-    public DateTime PublishedAt { get; set; } 
+    public DateTime PublishedAt { get; set; }
     public string? CompanyName { get; set; }
     public string? JobTitle { get; set; }
     public bool IsCSharpMentioned { get; set; } = false;

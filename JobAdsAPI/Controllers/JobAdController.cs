@@ -153,4 +153,4 @@ public class JobAdController(JobAdDbContext context) : ControllerBase
         var canConnect = await _context.Database.CanConnectAsync();
         return Ok(canConnect ? "Database is connected." : "Database is not connected.");
     }
-} 
+}
